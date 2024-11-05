@@ -26,6 +26,7 @@ import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,10 +34,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.el.ExpressionFactory;
-import javax.servlet.ServletContext;
-import javax.servlet.jsp.JspApplicationContext;
-import javax.servlet.jsp.JspFactory;
+import jakarta.el.ExpressionFactory;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.jsp.JspApplicationContext;
+import jakarta.servlet.jsp.JspFactory;
 
 import org.apache.tiles.Attribute;
 import org.apache.tiles.Definition;
@@ -110,7 +111,7 @@ public class CompleteAutoloadTilesContainerFactoryTest {
      */
     @SuppressWarnings("deprecation")
     @Test
-    public void testRegisterAttributeRenderers() {
+    public void testRegisterAttributeRenderers() throws MalformedURLException {
         BasicRendererFactory rendererFactory = createMock(BasicRendererFactory.class);
         ServletApplicationContext applicationContext = createMock(ServletApplicationContext.class);
         TilesContainer container = createMock(TilesContainer.class);
@@ -132,9 +133,9 @@ public class CompleteAutoloadTilesContainerFactoryTest {
                 getClass().getResourceAsStream("/velocity.properties"));
         expect(servletContext.getResourceAsStream("/WEB-INF/VM_global_library.vm")).andReturn(
                 getClass().getResourceAsStream("/VM_global_library.vm"));
-        expect(servletContext.getResourceAsStream("/WEB-INF/tools.xml")).andReturn(
-                getClass().getResourceAsStream("/tools.xml"));
-        expect(servletContext.getResourceAsStream(VelocityView.DEPRECATED_USER_TOOLS_PATH)).andReturn(null);
+        expect(servletContext.getResource("/WEB-INF/tools.xml")).andReturn(
+                getClass().getResource("/tools.xml"));
+        //expect(servletContext.getResourceAsStream(VelocityView.DEPRECATED_USER_TOOLS_PATH)).andReturn(null);
         servletContext.log((String) anyObject());
         expectLastCall().anyTimes();
         expect(servletContext.getRealPath("/")).andReturn(null);
