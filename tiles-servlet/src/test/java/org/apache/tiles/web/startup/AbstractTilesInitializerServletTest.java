@@ -24,9 +24,9 @@ import static org.easymock.classextension.EasyMock.*;
 
 import java.util.Enumeration;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
 
 import org.apache.tiles.request.servlet.ServletApplicationContext;
 import org.apache.tiles.startup.TilesInitializer;

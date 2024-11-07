@@ -30,8 +30,8 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.apache.velocity.context.Context;
 import org.apache.velocity.context.InternalContextAdapter;
@@ -45,7 +45,7 @@ public class AbstractDefaultToStringRenderableTest {
     /**
      * Test method for {@link org.apache.tiles.velocity.template.AbstractDefaultToStringRenderable
      * #AbstractDefaultToStringRenderable(org.apache.velocity.context.Context,
-     * java.util.Map, javax.servlet.http.HttpServletResponse, javax.servlet.http.HttpServletRequest)}.
+     * java.util.Map, jakarta.servlet.http.HttpServletResponse, jakarta.servlet.http.HttpServletRequest)}.
      */
     @Test
     public void testAbstractDefaultToStringRenderable() {

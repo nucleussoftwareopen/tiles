@@ -23,10 +23,10 @@ package org.apache.tiles.el;
 import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
 
-import javax.el.ExpressionFactory;
-import javax.servlet.ServletContext;
-import javax.servlet.jsp.JspApplicationContext;
-import javax.servlet.jsp.JspFactory;
+import jakarta.el.ExpressionFactory;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.jsp.JspApplicationContext;
+import jakarta.servlet.jsp.JspFactory;
 
 import org.apache.tiles.request.ApplicationContext;
 import org.junit.Test;

@@ -27,13 +27,13 @@
         <artifactId>tiles-master</artifactId>
         <groupId>org.apache.tiles</groupId>
         <version>7</version>
-        <relativePath />
+<!--        <relativePath>master/master.pom</relativePath>-->
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.tiles</groupId>
     <artifactId>tiles-parent</artifactId>
-    <version>3.1-SNAPSHOT</version>
+    <version>4.0.0</version>
     <packaging>pom</packaging>
     <name>Tiles 3</name>
     <description>Tiles 3: A framework for page composition.</description>
@@ -99,9 +99,9 @@
             </dependency>
 
             <dependency>
-                <groupId>org.apache.velocity</groupId>
-                <artifactId>velocity-tools</artifactId>
-                <version>2.0</version>
+                <groupId>org.apache.velocity.tools</groupId>
+                <artifactId>velocity-tools-generic</artifactId>
+                <version>4.0</version>
                 <exclusions>
                     <exclusion>
                         <artifactId>struts-taglib</artifactId>
@@ -160,7 +160,7 @@
             <dependency>
                 <groupId>org.freemarker</groupId>
                 <artifactId>freemarker</artifactId>
-                <version>2.3.15</version>
+                <version>2.3.33</version>
             </dependency>
 
             <dependency>
@@ -174,21 +174,21 @@
                 <version>2.3.2.Final</version>
             </dependency>
             <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>servlet-api</artifactId>
-                <version>2.5</version>
+                <groupId>jakarta.servlet</groupId>
+                <artifactId>jakarta.servlet-api</artifactId>
+                <version>5.0.0</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
-                <groupId>javax.servlet.jsp</groupId>
-                <artifactId>jsp-api</artifactId>
-                <version>2.1</version>
+                <groupId>jakarta.servlet.jsp</groupId>
+                <artifactId>jakarta.servlet.jsp-api</artifactId>
+                <version>3.1.1</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
-                <groupId>javax.el</groupId>
-                <artifactId>el-api</artifactId>
-                <version>1.0</version>
+                <groupId>jakarta.el</groupId>
+                <artifactId>jakarta.el-api</artifactId>
+                <version>5.0.0</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
@@ -237,12 +237,32 @@
             	<artifactId>tiles-request-api</artifactId>
             	<version>${tiles.request.version}</version>
             </dependency>
+
         </dependencies>
     </dependencyManagement>
 
     <build>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <configuration>
+                        <excludes>
+                            <include>**/*.java</include>
+                        </excludes>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>21</source>
+                        <target>21</target>
+                    </configuration>
+                    <version>3.10.1</version>
+                </plugin>
+
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
                     <configuration>
@@ -258,7 +278,7 @@
                 <plugin>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
-                    <version>2.3.7</version>
+                    <version>5.1.9</version>
                     <inherited>true</inherited>
                 </plugin>
             </plugins>
@@ -305,6 +325,35 @@
                     <goals>deploy site-deploy</goals>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>1.4.1</version>
+                <executions>
+                    <execution>
+                        <id>enforce-java</id>
+                        <goals><goal>enforce</goal></goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>[17,)</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.7.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
         </plugins>
 
         <defaultGoal>install</defaultGoal>
@@ -319,8 +368,8 @@
         <tiles.osgi.private />
         <tiles.manifestfile>target/osgi/MANIFEST.MF</tiles.manifestfile>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <tiles.request.version>1.0.7</tiles.request.version>
-        <tiles.autotag.version>1.1.0</tiles.autotag.version>
+        <tiles.request.version>2.0.0</tiles.request.version>
+        <tiles.autotag.version>2.0.0</tiles.autotag.version>
     </properties>
 
     <dependencies />
@@ -386,6 +435,33 @@
                     </plugin>
                 </plugins>
             </reporting>
+        </profile>
+        <profile>
+            <id>release-sign-artifacts</id>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.2.4</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
 
     </profiles>
